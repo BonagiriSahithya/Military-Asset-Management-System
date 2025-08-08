@@ -1,0 +1,72 @@
+.purchases {
+  position: relative;
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #55aa55;
+  color: #ddffdd;
+  background-image: url('https://images.unsplash.com/photo-1504384308090-0812ef0a78a2?auto=format&fit=crop&w=800&q=80');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+/* Dark overlay to improve readability */
+.purchases::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 25, 10, 0.85);
+  border-radius: 12px;
+  z-index: 0;
+}
+
+/* Make children appear above overlay */
+.purchases > * {
+  position: relative;
+  z-index: 1;
+}
+
+.purchases h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #aaffaa;
+  text-shadow: 0 0 10px #55aa55;
+}
+
+.purchases form input,
+.purchases form button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e0ffe0;
+  border: 1px solid #55aa55;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.purchases form input::placeholder {
+  color: #ddffdd99;
+}
+
+.purchases form button:hover {
+  background-color: #55aa55;
+  color: #fff;
+  cursor: pointer;
+}
+
+.purchases ul {
+  margin-top: 1.5rem;
+  max-height: 250px;
+  overflow-y: auto;
+  list-style: none;
+  padding-left: 0;
+}
+
+.purchases ul li {
+  padding: 0.4rem;
+  border-bottom: 1px solid #55aa55;
+  color: #ddffdd;
+  text-shadow: 0 0 3px #000;
+}

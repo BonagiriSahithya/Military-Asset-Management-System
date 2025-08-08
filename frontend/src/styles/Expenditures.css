@@ -1,0 +1,73 @@
+.expenditures {
+  position: relative;
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #d45555;
+  color: #ffdede;
+  background-image: url('https://images.unsplash.com/photo-1581091215367-021a0e57fdfa?auto=format&fit=crop&w=800&q=80');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+/* Overlay to darken background image */
+.expenditures::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 10, 25, 0.85); /* dark overlay */
+  border-radius: 12px;
+  z-index: 0;
+}
+
+/* Make all direct children appear above overlay */
+.expenditures > * {
+  position: relative;
+  z-index: 1;
+}
+
+.expenditures h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #ffaaaa;
+  text-shadow: 0 0 10px #d45555;
+}
+
+.expenditures form input,
+.expenditures form button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid #aa4444;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.expenditures form input::placeholder {
+  color: #ffdede99;
+}
+
+.expenditures form button:hover {
+  background-color: #aa4444;
+  color: #fff;
+  cursor: pointer;
+}
+
+.expenditures ul {
+  margin-top: 1.5rem;
+  max-height: 250px;
+  overflow-y: auto;
+  list-style: none;
+  padding-left: 0;
+}
+
+.expenditures ul li {
+  padding: 0.4rem;
+  border-bottom: 1px solid #aa4444;
+  color: #ffdede;
+  text-shadow: 0 0 3px #000;
+}
+
