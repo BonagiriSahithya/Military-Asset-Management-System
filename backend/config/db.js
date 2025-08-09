@@ -9,10 +9,15 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
-    logging: false
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false // Aiven uses public CA so this is safe
+      }
+    }
   }
 );
 
 module.exports = sequelize;
-
 
