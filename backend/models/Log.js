@@ -1,0 +1,11 @@
+const mongoose = require('mongoose');
+
+const logSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  route: { type: String },
+  method: { type: String },
+  body: { type: Object },
+  timestamp: { type: Date, default: Date.now },
+});
+
+module.exports = mongoose.model('Log', logSchema);
