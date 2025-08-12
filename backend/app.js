@@ -18,6 +18,11 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Root route to avoid "Cannot GET /"
+app.get('/', (req, res) => {
+  res.send('Military Asset Management System API is running');
+});
+
 // Import routes
 const authRoutes = require('./routes/authRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
