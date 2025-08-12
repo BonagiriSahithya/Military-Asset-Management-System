@@ -17,21 +17,23 @@ const Signup = () => {
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setError('');
-    try {
-      await API.post('/auth/signup', form);
-      navigate('/login'); // after successful signup, go to login
-    } catch (err) {
-      if (err.response?.status === 409) {
-        // User already exists, redirect to login
-        navigate('/login');
-      } else {
-        setError(err.response?.data?.message || 'Signup failed');
-      }
+const handleSubmit = async e => {
+  e.preventDefault();
+  setError('');
+  try {
+    const { data } = await API.post('/auth/signup', form);
+    localStorage.setItem('token', data.token);  // Save token here
+    navigate('/dashboard'); // redirect to dashboard after signup
+  } catch (err) {
+    if (err.response?.status === 409) {
+      // User exists - redirect to login
+      navigate('/login');
+    } else {
+      setError(err.response?.data?.message || 'Signup failed');
     }
-  };
+  }
+};
+
 
   return (
     <div style={containerStyle}>
