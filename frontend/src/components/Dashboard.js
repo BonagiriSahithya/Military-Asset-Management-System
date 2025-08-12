@@ -6,17 +6,24 @@ const Dashboard = () => {
   const [metrics, setMetrics] = useState(null);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const { data } = await API.get('/dashboard');
-        setMetrics(data);
-      } catch (err) {
-        setError('Failed to fetch dashboard data');
-      }
-    };
-    fetchDashboard();
-  }, []);
+ useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    setError('Please login first');
+    return;
+  }
+
+  const fetchDashboard = async () => {
+    try {
+      const { data } = await API.get('/dashboard');
+      setMetrics(data);
+    } catch (err) {
+      setError('Failed to fetch dashboard data');
+    }
+  };
+  fetchDashboard();
+}, []);
+
 
   if (error)
     return (
