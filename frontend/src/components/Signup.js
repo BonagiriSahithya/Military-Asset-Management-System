@@ -22,8 +22,9 @@ const handleSubmit = async e => {
   setError('');
   try {
     const { data } = await API.post('/auth/signup', form);
+    console.log('Response data:', data); 
     localStorage.setItem('token', data.token);  // Save token here
-    navigate('/dashboard'); // redirect to dashboard after signup
+    navigate('/login'); // redirect to dashboard after signup
   } catch (err) {
     if (err.response?.status === 409) {
       // User exists - redirect to login
