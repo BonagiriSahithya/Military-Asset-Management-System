@@ -4,12 +4,10 @@ const { createPurchase, getPurchases } = require('../controllers/purchaseControl
 const { protect } = require('../middleware/authMiddleware');
 const { authorizeRoles } = require('../middleware/roleMiddleware');
 
-router.use(protect);
+// Public GET route - no auth required
+router.get('/', getPurchases);
 
-// Only Admin and Logistics Officers can create purchases
-router.post('/', authorizeRoles('Admin', 'Logistics Officer'), createPurchase);
-
-// Admin, Base Commander (for their base), Logistics Officer can view purchases
-router.get('/', authorizeRoles('Admin', 'Base Commander', 'Logistics Officer'), getPurchases);
+// Protected POST route - only Admin and Logistics Officer can create
+router.post('/', protect, authorizeRoles('Admin', 'Logistics Officer'), createPurchase);
 
 module.exports = router;

@@ -4,12 +4,10 @@ const { createExpenditure, getExpenditures } = require('../controllers/expenditu
 const { protect } = require('../middleware/authMiddleware');
 const { authorizeRoles } = require('../middleware/roleMiddleware');
 
-router.use(protect);
+// Public GET - anyone can fetch expenditures
+router.get('/', getExpenditures);
 
-// Admin and Base Commanders can create expenditures
-router.post('/', authorizeRoles('Admin', 'Base Commander'), createExpenditure);
-
-// Admin and Base Commanders can view expenditures
-router.get('/', authorizeRoles('Admin', 'Base Commander'), getExpenditures);
+// Protected POST - only Admin and Base Commander can create
+router.post('/', protect, authorizeRoles('Admin', 'Base Commander'), createExpenditure);
 
 module.exports = router;

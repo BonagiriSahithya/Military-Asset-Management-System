@@ -23,6 +23,7 @@ exports.getAssignments = async (req, res) => {
   try {
     const { base, equipmentType, startDate, endDate } = req.query;
     let filters = {};
+
     if (base) filters.base = base;
     if (equipmentType) filters.equipmentType = equipmentType;
     if (startDate || endDate) {
@@ -31,7 +32,8 @@ exports.getAssignments = async (req, res) => {
       if (endDate) filters.date.$lte = new Date(endDate);
     }
 
-    if (req.user.role === 'Base Commander') {
+    // Apply base filtering if user is logged in and role is Base Commander
+    if (req.user && req.user.role === 'Base Commander') {
       filters.base = req.user.base;
     }
 

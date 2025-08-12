@@ -4,12 +4,10 @@ const { createAssignment, getAssignments } = require('../controllers/assignmentC
 const { protect } = require('../middleware/authMiddleware');
 const { authorizeRoles } = require('../middleware/roleMiddleware');
 
-router.use(protect);
+// Public GET route — anyone can view assignments
+router.get('/', getAssignments);
 
-// Admin and Base Commanders can create assignments
-router.post('/', authorizeRoles('Admin', 'Base Commander'), createAssignment);
-
-// Admin and Base Commanders can view assignments
-router.get('/', authorizeRoles('Admin', 'Base Commander'), getAssignments);
+// Protected POST route — only Admin and Base Commanders can create
+router.post('/', protect, authorizeRoles('Admin', 'Base Commander'), createAssignment);
 
 module.exports = router;

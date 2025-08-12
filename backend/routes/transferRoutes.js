@@ -4,12 +4,10 @@ const { createTransfer, getTransfers } = require('../controllers/transferControl
 const { protect } = require('../middleware/authMiddleware');
 const { authorizeRoles } = require('../middleware/roleMiddleware');
 
-router.use(protect);
+// Public GET route — no auth required
+router.get('/', getTransfers);
 
-// Only Admin and Logistics Officers can create transfers
-router.post('/', authorizeRoles('Admin', 'Logistics Officer'), createTransfer);
-
-// Admin, Base Commander (for their base), Logistics Officer can view transfers
-router.get('/', authorizeRoles('Admin', 'Base Commander', 'Logistics Officer'), getTransfers);
+// Protected POST route — only Admin and Logistics Officer can create
+router.post('/', protect, authorizeRoles('Admin', 'Logistics Officer'), createTransfer);
 
 module.exports = router;

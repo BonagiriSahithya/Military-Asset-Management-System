@@ -1,6 +1,6 @@
 const Purchase = require('../models/Purchase');
 
-// Create a new purchase
+// Create a new purchase (protected)
 exports.createPurchase = async (req, res) => {
   try {
     const { base, equipmentType, quantity, date } = req.body;
@@ -19,7 +19,7 @@ exports.createPurchase = async (req, res) => {
   }
 };
 
-// Get all purchases with optional filters
+// Get all purchases (public)
 exports.getPurchases = async (req, res) => {
   try {
     const { base, equipmentType, startDate, endDate } = req.query;
@@ -32,9 +32,9 @@ exports.getPurchases = async (req, res) => {
       if (endDate) filters.date.$lte = new Date(endDate);
     }
 
-    // Role-based filtering
-    if (req.user.role === 'Base Commander') {
-      filters.base = req.user.base; // Base commander only sees their base
+    // Role-based filtering ONLY if user is logged in
+    if (req.user && req.user.role === 'Base Commander') {
+      filters.base = req.user.base; // base commander only sees their base purchases
     }
 
     const purchases = await Purchase.find(filters).sort({ date: -1 });
@@ -44,4 +44,3 @@ exports.getPurchases = async (req, res) => {
     res.status(500).json({ message: 'Server error fetching purchases' });
   }
 };
-

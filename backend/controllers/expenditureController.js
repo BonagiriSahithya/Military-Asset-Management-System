@@ -30,7 +30,8 @@ exports.getExpenditures = async (req, res) => {
       if (endDate) filters.date.$lte = new Date(endDate);
     }
 
-    if (req.user.role === 'Base Commander') {
+    // If user is logged in and is Base Commander, restrict to their base
+    if (req.user && req.user.role === 'Base Commander') {
       filters.base = req.user.base;
     }
 

@@ -5,34 +5,60 @@ const Expenditure = require('../models/Expenditure');
 
 exports.getDashboardData = async (req, res) => {
   try {
-    // You can add filters if you want; for now, fetch all data aggregates
+    // Base filtering for Base Commander
+    let baseFilter = {};
+    if (req.user.role === 'Base Commander') {
+      baseFilter = { base: req.user.base };
+    }
 
+    // Sum purchases (filtered by base if Base Commander)
     const openingPurchases = await Purchase.aggregate([
+      { $match: baseFilter },
       { $group: { _id: null, total: { $sum: '$quantity' } } },
     ]);
+
+    // Transfers In (toBase)
+    const transfersInFilter = {};
+    if (req.user.role === 'Base Commander') {
+      transfersInFilter.toBase = req.user.base;
+    }
     const openingTransfersIn = await Transfer.aggregate([
+      { $match: transfersInFilter },
       { $group: { _id: null, total: { $sum: '$quantity' } } },
     ]);
+
+    // Transfers Out (fromBase)
+    const transfersOutFilter = {};
+    if (req.user.role === 'Base Commander') {
+      transfersOutFilter.fromBase = req.user.base;
+    }
     const openingTransfersOut = await Transfer.aggregate([
+      { $match: transfersOutFilter },
       { $group: { _id: null, total: { $sum: '$quantity' } } },
     ]);
-    const openingAssignments = await Assignment.aggregate([
+
+    // Assignments
+    const assignments = await Assignment.aggregate([
+      { $match: baseFilter },
       { $group: { _id: null, total: { $sum: '$quantity' } } },
     ]);
-    const openingExpenditures = await Expenditure.aggregate([
+
+    // Expenditures
+    const expenditures = await Expenditure.aggregate([
+      { $match: baseFilter },
       { $group: { _id: null, total: { $sum: '$quantity' } } },
     ]);
 
     const getTotal = (arr) => (arr.length > 0 ? arr[0].total : 0);
 
     const openingBalance = getTotal(openingPurchases) + getTotal(openingTransfersIn) - getTotal(openingTransfersOut);
-    const assigned = getTotal(openingAssignments);
-    const expended = getTotal(openingExpenditures);
+    const assigned = getTotal(assignments);
+    const expended = getTotal(expenditures);
     const netMovement = openingBalance - assigned - expended;
 
     res.json({
       openingBalance,
-      closingBalance: openingBalance, // for simplicity same as opening
+      closingBalance: openingBalance, // or calculate differently if needed
       netMovement,
       assigned,
       expended,

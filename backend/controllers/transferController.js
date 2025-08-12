@@ -23,6 +23,7 @@ exports.getTransfers = async (req, res) => {
   try {
     const { base, equipmentType, startDate, endDate } = req.query;
     let filters = {};
+
     if (base) {
       // Transfers where base is either fromBase or toBase
       filters.$or = [{ fromBase: base }, { toBase: base }];
@@ -34,8 +35,8 @@ exports.getTransfers = async (req, res) => {
       if (endDate) filters.date.$lte = new Date(endDate);
     }
 
-    // Role-based filtering
-    if (req.user.role === 'Base Commander') {
+    // Role-based filtering ONLY if user is logged in
+    if (req.user && req.user.role === 'Base Commander') {
       filters.$or = [{ fromBase: req.user.base }, { toBase: req.user.base }];
     }
 
@@ -46,5 +47,3 @@ exports.getTransfers = async (req, res) => {
     res.status(500).json({ message: 'Server error fetching transfers' });
   }
 };
-
-
